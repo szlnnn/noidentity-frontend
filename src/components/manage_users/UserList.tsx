@@ -72,7 +72,7 @@ const UserList = () => {
         <EditUserModalComponent
           isOpen={isOpen}
           onClose={afterClose}
-          title={"Edit manage_users data"}
+          title={"Edit user data"}
           user={currentUser}
         />
       )}
