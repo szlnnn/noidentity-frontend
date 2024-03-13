@@ -171,7 +171,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
                 <option value="ADMIN">Admin</option>
               </Select>
             </FormControl>
-            <HStack>
+            <HStack marginTop={3}>
               <Button type="submit" colorScheme="blue" mr={3}>
                 Save
               </Button>

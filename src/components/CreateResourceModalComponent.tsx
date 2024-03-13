@@ -16,47 +16,71 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import ErrorAlert from "./ErrorAlert.tsx";
-import { useQueryClient } from "@tanstack/react-query";
-import UserService from "../service/userService.ts";
-import { User } from "../entity/User.ts";
-import Moment from "moment";
+import ResourceService from "../service/resourceService.ts";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  user: User;
 }
 
-const RegisterUserModalComponent = ({
-  isOpen,
-  title,
-  onClose,
-  user,
-}: Props) => {
+const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
 
-  const queryClient = useQueryClient();
-
-  const [updatedUser, setUpdatedUser] = useState(user);
+  const [formData, setFormData] = useState({
+    name: "",
+    type: "",
+    azureTenantId: "",
+    azureApplicationId: "",
+    azureScope: "",
+    azureSecret: "",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setUpdatedUser({
-      ...updatedUser,
+    setFormData({
+      ...formData,
       [name]: value,
     });
   };
 
+  const handleChangeType = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    if (e.target.value === "Offline") {
+      setFormData({
+        ...formData,
+        type: e.target.value,
+        azureTenantId: "",
+        azureApplicationId: "",
+        azureScope: "",
+        azureSecret: "",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        type: e.target.value,
+      });
+    }
+  };
+
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    UserService.update(updatedUser).then(
+    ResourceService.create({
+      name: formData.name,
+      type: formData.type,
+      azureConfig: {
+        tenantId: formData.azureTenantId,
+        applicationId: formData.azureApplicationId,
+        scope: formData.azureScope,
+        secret: formData.azureSecret,
+      },
+    }).then(
       (response) => {
         if (response.data) {
-          queryClient.invalidateQueries(["users"]);
           onClose();
         }
       },
@@ -80,79 +104,64 @@ const RegisterUserModalComponent = ({
         <ModalCloseButton />
         <ModalBody>
           <form ref={form} onSubmit={handleRegister}>
-            <FormControl isReadOnly={true}>
-              <FormLabel>Login</FormLabel>
+            <FormControl isRequired={true}>
+              <FormLabel>Name</FormLabel>
               <Input
                 type="text"
-                name="login"
-                value={updatedUser?.login}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                type={"date"}
-                name={"startDate"}
-                value={Moment(updatedUser?.startDate).format("yyyy-MM-DD")}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>End Date</FormLabel>
-              <Input
-                type={"date"}
-                name={"endDate"}
-                value={Moment(updatedUser?.endDate).format("yyyy-MM-DD")}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>First Name</FormLabel>
-              <Input
-                type="text"
-                name="firstName"
-                value={updatedUser?.firstName}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>Last Name</FormLabel>
-              <Input
-                type="text"
-                name="lastName"
-                value={updatedUser?.lastName}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="text"
-                name="email"
-                value={updatedUser?.email}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Role</FormLabel>
+              <FormLabel>Resource Type</FormLabel>
               <Select
-                placeholder="Select role"
-                name="role"
-                value={updatedUser?.role}
-                onChange={handleChange}
+                name="type"
+                value={formData.type}
+                onChange={handleChangeType}
                 mb={6}
               >
-                <option value="USER">User</option>
-                <option value="ADMIN">Admin</option>
+                <option value="Azure">Azure</option>
+                <option value="Offline">Offline</option>
               </Select>
+            </FormControl>
+
+            <FormControl isDisabled={formData.type === "Offline"}>
+              <FormLabel>Azure Tenant Id</FormLabel>
+              <Input
+                type="text"
+                name="azureTenantId"
+                value={formData.azureTenantId}
+                onChange={handleChange}
+              />
+              <FormLabel>Azure Application Id</FormLabel>
+              <Input
+                type="text"
+                name="azureApplicationId"
+                value={formData.azureApplicationId}
+                onChange={handleChange}
+              />
+              <FormLabel>Azure Scope</FormLabel>
+              <Input
+                type="text"
+                name="azureScope"
+                value={formData.azureScope}
+                onChange={handleChange}
+              />
+              <FormLabel>Name</FormLabel>
+              <Input
+                type="text"
+                name="azureSecret"
+                value={formData.azureSecret}
+                onChange={handleChange}
+              />
             </FormControl>
             <HStack marginTop={3}>
               <Button type="submit" colorScheme="blue" mr={3}>
                 Save
               </Button>
               <Button
-                variant="ghost"
+                variant="outline"
                 onClick={() => {
                   setError("");
                   onClose();
@@ -172,4 +181,4 @@ const RegisterUserModalComponent = ({
   );
 };
 
-export default RegisterUserModalComponent;
+export default CreateResourceModalComponent;

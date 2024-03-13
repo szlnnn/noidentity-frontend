@@ -4,6 +4,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import UserEditPage from "./pages/UserEditPage.tsx";
 import PrivateRoutes from "./router/PrivateRoutes.tsx";
+import ManageResourcePage from "./pages/ManageResourcePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <UserEditPage />,
+      },
+      {
+        path: "/resources",
+        element: <ManageResourcePage />,
       },
     ],
   },

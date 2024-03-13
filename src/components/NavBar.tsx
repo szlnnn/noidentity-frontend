@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Spacer, Button } from "@chakra-ui/react";
 import { FiLogOut } from "react-icons/fi";
 import logoSmall from "../assets/logosmall.webp";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../service/authService.ts";
 
 const Navbar = () => {
@@ -15,7 +15,9 @@ const Navbar = () => {
   return (
     <Box p={1} bg="gray.700">
       <Flex align="center">
-        <Image src={logoSmall} height={66} width={350} />
+        <Link to={"/"}>
+          <Image src={logoSmall} height={66} width={350} />
+        </Link>
         <Spacer />
 
         <Button

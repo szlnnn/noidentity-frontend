@@ -18,7 +18,7 @@ import Moment from "moment/moment";
 const UserList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const { data: users, isLoading, error } = useUsers();
+  const { data: users } = useUsers();
   const handleEditClick = (user: User) => {
     setCurrentUser(user);
     onOpen();

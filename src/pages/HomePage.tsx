@@ -14,9 +14,11 @@ const HomePage = () => {
           </GridItem>
         </Link>
         <GridItem>
-          <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-            Menu Item 2
-          </Box>
+          <Link to={"/resources"}>
+            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
+              Menu Item 2
+            </Box>
+          </Link>
         </GridItem>
         <GridItem>
           <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">

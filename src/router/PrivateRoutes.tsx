@@ -25,6 +25,7 @@ const PrivateRoutes = () => {
               email={user.email}
               endDate={user.endDate}
               startDate={user.startDate}
+              role={user.role}
             />
           </Box>
           <Outlet />
