@@ -10,8 +10,8 @@ import {
   Td,
   useDisclosure,
 } from "@chakra-ui/react";
-import { User } from "../entity/User.ts";
-import useUsers from "../hooks/useUsers.ts";
+import { User } from "../../entity/User.ts";
+import useUsers from "../../hooks/useUsers.ts";
 import EditUserModalComponent from "./EditUserModalComponent.tsx";
 import Moment from "moment/moment";
 
@@ -72,7 +72,7 @@ const UserList = () => {
         <EditUserModalComponent
           isOpen={isOpen}
           onClose={afterClose}
-          title={"Edit user data"}
+          title={"Edit manage_users data"}
           user={currentUser}
         />
       )}

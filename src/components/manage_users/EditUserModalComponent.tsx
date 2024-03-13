@@ -15,58 +15,45 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import AuthService from "../service/authService.ts";
-import ErrorAlert from "./ErrorAlert.tsx";
+import ErrorAlert from "../alerts/ErrorAlert.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import UserService from "../../service/userService.ts";
+import { User } from "../../entity/User.ts";
+import Moment from "moment";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  user: User;
 }
 
-const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
+const RegisterUserModalComponent = ({
+  isOpen,
+  title,
+  onClose,
+  user,
+}: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
 
   const queryClient = useQueryClient();
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    login: "",
-    startDate: "",
-    endDate: "",
-    email: "",
-    password: "",
-    role: "user",
-  });
+  const [updatedUser, setUpdatedUser] = useState(user);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setUpdatedUser({
+      ...updatedUser,
       [name]: value,
     });
   };
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    AuthService.register(
-      {
-        login: formData.login,
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        role: formData.role,
-      },
-      formData.password,
-      formData.role,
-    ).then(
+    UserService.update(updatedUser).then(
       (response) => {
         if (response.data) {
           queryClient.invalidateQueries(["users"]);
@@ -93,12 +80,12 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
         <ModalCloseButton />
         <ModalBody>
           <form ref={form} onSubmit={handleRegister}>
-            <FormControl isRequired={true}>
+            <FormControl isReadOnly={true}>
               <FormLabel>Login</FormLabel>
               <Input
                 type="text"
                 name="login"
-                value={formData.login}
+                value={updatedUser?.login}
                 onChange={handleChange}
               />
             </FormControl>
@@ -107,7 +94,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               <Input
                 type={"date"}
                 name={"startDate"}
-                value={formData.startDate}
+                value={Moment(updatedUser?.startDate).format("yyyy-MM-DD")}
                 onChange={handleChange}
               />
             </FormControl>
@@ -116,7 +103,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               <Input
                 type={"date"}
                 name={"endDate"}
-                value={formData.endDate}
+                value={Moment(updatedUser?.endDate).format("yyyy-MM-DD")}
                 onChange={handleChange}
               />
             </FormControl>
@@ -125,7 +112,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               <Input
                 type="text"
                 name="firstName"
-                value={formData.firstName}
+                value={updatedUser?.firstName}
                 onChange={handleChange}
               />
             </FormControl>
@@ -134,7 +121,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               <Input
                 type="text"
                 name="lastName"
-                value={formData.lastName}
+                value={updatedUser?.lastName}
                 onChange={handleChange}
               />
             </FormControl>
@@ -143,19 +130,8 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               <Input
                 type="text"
                 name="email"
-                value={formData.email}
+                value={updatedUser?.email}
                 onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                mb={4}
               />
             </FormControl>
             <FormControl>
@@ -163,7 +139,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               <Select
                 placeholder="Select role"
                 name="role"
-                value={formData.role}
+                value={updatedUser?.role}
                 onChange={handleChange}
                 mb={6}
               >

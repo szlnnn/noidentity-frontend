@@ -1,4 +1,4 @@
-import ResourcePageHeading from "../components/ResourcePageHeading.tsx";
+import ResourcePageHeading from "../components/resource/ResourcePageHeading.tsx";
 import { VStack } from "@chakra-ui/react";
 
 const ManageResourcePage = () => {

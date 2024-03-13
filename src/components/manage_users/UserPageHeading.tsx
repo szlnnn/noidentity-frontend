@@ -26,7 +26,7 @@ const UserPageHeading = () => {
         <RegisterUserModalComponent
           isOpen={isOpen}
           onClose={onClose}
-          title={"Create new user"}
+          title={"Create new manage_users"}
         />
       )}
     </>

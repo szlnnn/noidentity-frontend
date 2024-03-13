@@ -15,8 +15,8 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import ErrorAlert from "./ErrorAlert.tsx";
-import ResourceService from "../service/resourceService.ts";
+import ErrorAlert from "../alerts/ErrorAlert.tsx";
+import ResourceService from "../../service/resourceService.ts";
 
 interface Props {
   isOpen: boolean;

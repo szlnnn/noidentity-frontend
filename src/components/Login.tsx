@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import logoSmall from "../assets/logosmall.webp";
 import AuthService from "../service/authService.ts";
-import ErrorAlert from "./ErrorAlert.tsx";
+import ErrorAlert from "./alerts/ErrorAlert.tsx";
 
 const Login = () => {
   const [username, setUsername] = useState("");

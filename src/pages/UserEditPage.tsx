@@ -1,6 +1,6 @@
-import UserList from "../components/UserList.tsx";
+import UserList from "../components/manage_users/UserList.tsx";
 import { VStack } from "@chakra-ui/react";
-import UserPageHeading from "../components/UserPageHeading.tsx";
+import UserPageHeading from "../components/manage_users/UserPageHeading.tsx";
 
 const UserEditPage = () => {
   return (
