@@ -9,7 +9,7 @@ const PrivateRoutes = () => {
   const user = authService.getCurrentUser();
 
   if (user === undefined) {
-    return null; // or loading indicator/spinner/etc
+    return null;
   }
 
   return user.token ? (
@@ -22,7 +22,9 @@ const PrivateRoutes = () => {
               login={user.login}
               firstName={user.firstName}
               lastName={user.lastName}
-              role={user.role}
+              email={user.email}
+              endDate={user.endDate}
+              startDate={user.startDate}
             />
           </Box>
           <Outlet />

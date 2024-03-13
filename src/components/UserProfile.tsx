@@ -1,12 +1,6 @@
 import { Box, Heading, Text, Stack, Image } from "@chakra-ui/react";
 import profile_placeholder from "../assets/profile_placeholder.webp";
-
-export interface User {
-  login: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-}
+import { User } from "../entity/User.ts";
 
 const UserProfile = (user: User) => {
   return (
@@ -22,7 +16,7 @@ const UserProfile = (user: User) => {
       </Stack>
 
       <Box p={4}>
-        <Text>{user.role || "No role available."}</Text>
+        <Text>{"No role available."}</Text>
       </Box>
     </Box>
   );

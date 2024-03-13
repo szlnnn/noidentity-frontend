@@ -4,7 +4,6 @@ import {
   AlertTitle,
   AlertDescription,
 } from "@chakra-ui/react";
-import { useState } from "react";
 
 interface Props {
   children: string;
@@ -13,7 +12,6 @@ interface Props {
 const SuccessAlert = ({ children }: Props) => {
   return (
     <Alert
-      onClick={() => setIsVisible(false)}
       status="success"
       variant="subtle"
       flexDirection="column"

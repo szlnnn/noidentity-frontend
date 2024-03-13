@@ -1,17 +1,10 @@
 import axios from "axios";
+import { User } from "../entity/User.ts";
 const API_URL = "http://localhost:8080/";
 
-const register = (
-  login: string,
-  firstName: string,
-  password: string,
-  lastName: string,
-  role: string,
-) => {
+const register = (accountDto: User, password: string, role: string) => {
   return axios.post(API_URL + "register", {
-    login,
-    firstName,
-    lastName,
+    accountDto,
     password,
     role,
   });
@@ -27,7 +20,6 @@ const login = (username: string, password: string) => {
       if (response.data.login) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-
       return response.data;
     });
 };
