@@ -5,7 +5,7 @@ import UserPageHeading from "../components/manage_users/UserPageHeading.tsx";
 const UserEditPage = () => {
   return (
     <>
-      <VStack padding={5} width={"60%"}>
+      <VStack padding={5}>
         <UserPageHeading></UserPageHeading>
         <UserList></UserList>
       </VStack>

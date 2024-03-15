@@ -28,12 +28,7 @@ interface Props {
   user: User;
 }
 
-const RegisterUserModalComponent = ({
-  isOpen,
-  title,
-  onClose,
-  user,
-}: Props) => {
+const EditUserModalComponent = ({ isOpen, title, onClose, user }: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
 
@@ -51,7 +46,7 @@ const RegisterUserModalComponent = ({
     });
   };
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     UserService.update(updatedUser).then(
       (response) => {
@@ -79,7 +74,7 @@ const RegisterUserModalComponent = ({
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <form ref={form} onSubmit={handleRegister}>
+          <form ref={form} onSubmit={handleUpdate}>
             <FormControl isReadOnly={true}>
               <FormLabel>Login</FormLabel>
               <Input
@@ -172,4 +167,4 @@ const RegisterUserModalComponent = ({
   );
 };
 
-export default RegisterUserModalComponent;
+export default EditUserModalComponent;

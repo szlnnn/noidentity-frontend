@@ -18,67 +18,71 @@ import { useRef, useState } from "react";
 import ErrorAlert from "../alerts/ErrorAlert.tsx";
 import ResourceService from "../../service/resourceService.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import { Resource } from "../../entity/Resource.ts";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  resource: Resource;
 }
 
-const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
+const UpdateResourceModalComponent = ({
+  isOpen,
+  title,
+  onClose,
+  resource,
+}: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
+  const [azureTenant, setAzureTenant] = useState(
+    resource.azureConfig?.tenantId || "",
+  );
 
-  const [formData, setFormData] = useState({
-    name: "",
-    type: "",
-    azureTenantId: "",
-    azureApplicationId: "",
-    azureScope: "",
-    azureSecret: "",
-  });
+  const [azureApplication, setAzureApplication] = useState(
+    resource.azureConfig?.applicationId || "",
+  );
+  const [azureSecret, setAzureSecret] = useState(
+    resource.azureConfig?.secret || "",
+  );
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  const [azureScope, setAzureScope] = useState(
+    resource.azureConfig?.scope || "",
+  );
+
+  const handleTenantChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setAzureTenant(event.target.value);
   };
 
-  const handleChangeType = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  const handleApplicationChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    if (e.target.value === "Offline") {
-      setFormData({
-        ...formData,
-        type: e.target.value,
-        azureTenantId: "",
-        azureApplicationId: "",
-        azureScope: "",
-        azureSecret: "",
-      });
-    } else {
-      setFormData({
-        ...formData,
-        type: e.target.value,
-      });
-    }
+    setAzureApplication(event.target.value);
+  };
+  const handleSecretChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setAzureSecret(event.target.value);
   };
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleScopeChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setAzureScope(event.target.value);
+  };
+
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    ResourceService.create({
-      name: formData.name,
-      type: formData.type,
+    ResourceService.update({
+      ...resource,
       azureConfig: {
-        tenantId: formData.azureTenantId,
-        applicationId: formData.azureApplicationId,
-        scope: formData.azureScope,
-        secret: formData.azureSecret,
+        tenantId: azureTenant,
+        applicationId: azureApplication,
+        scope: azureScope,
+        secret: azureSecret,
       },
     }).then(
       (response) => {
@@ -106,57 +110,47 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <form ref={form} onSubmit={handleRegister}>
-            <FormControl isRequired={true}>
+          <form ref={form} onSubmit={handleUpdate}>
+            <FormControl isDisabled={true}>
               <FormLabel>Name</FormLabel>
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-              />
+              <Input type="text" name="name" value={resource.name} />
             </FormControl>
-            <FormControl>
+            <FormControl isDisabled={true}>
               <FormLabel>Resource Type</FormLabel>
-              <Select
-                name="type"
-                value={formData.type}
-                onChange={handleChangeType}
-                mb={6}
-              >
+              <Select name="type" value={resource.type} mb={6}>
                 <option value="Azure">Azure</option>
                 <option value="Offline">Offline</option>
               </Select>
             </FormControl>
 
-            <FormControl isDisabled={formData.type === "Offline"}>
+            <FormControl isDisabled={resource.type === "Offline"}>
               <FormLabel>Azure Tenant Id</FormLabel>
               <Input
                 type="text"
                 name="azureTenantId"
-                value={formData.azureTenantId}
-                onChange={handleChange}
+                value={azureTenant}
+                onChange={handleTenantChange}
               />
               <FormLabel>Azure Application Id</FormLabel>
               <Input
                 type="text"
                 name="azureApplicationId"
-                value={formData.azureApplicationId}
-                onChange={handleChange}
+                value={azureApplication}
+                onChange={handleApplicationChange}
               />
               <FormLabel>Azure Scope</FormLabel>
               <Input
                 type="text"
                 name="azureScope"
-                value={formData.azureScope}
-                onChange={handleChange}
+                value={azureScope}
+                onChange={handleScopeChange}
               />
               <FormLabel>Name</FormLabel>
               <Input
                 type="text"
                 name="azureSecret"
-                value={formData.azureSecret}
-                onChange={handleChange}
+                value={azureSecret}
+                onChange={handleSecretChange}
               />
             </FormControl>
             <HStack marginTop={3}>
@@ -184,4 +178,4 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
   );
 };
 
-export default CreateResourceModalComponent;
+export default UpdateResourceModalComponent;

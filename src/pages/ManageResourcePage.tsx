@@ -1,11 +1,12 @@
 import ResourcePageHeading from "../components/resource/ResourcePageHeading.tsx";
 import { VStack } from "@chakra-ui/react";
+import ResourceGrid from "../components/resource/ResourceGrid.tsx";
 
 const ManageResourcePage = () => {
   return (
-    <VStack width={"60%"}>
+    <VStack>
       <ResourcePageHeading />
-      <div>Manage Resource</div>;
+      <ResourceGrid />
     </VStack>
   );
 };

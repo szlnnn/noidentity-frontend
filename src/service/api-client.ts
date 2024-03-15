@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
+import authService from "./authService.ts";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080/api/v1",
@@ -11,7 +12,12 @@ class ApiClient<T> {
     this.endpoint = endpoint;
   }
 
-  getAll = (config: AxiosRequestConfig) => {
+  getAll = () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authService.getCurrentUser().token}`,
+      },
+    };
     return axiosInstance.get<T>(this.endpoint, config).then((res) => res.data);
   };
 

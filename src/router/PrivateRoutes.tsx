@@ -1,8 +1,9 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import authService from "../service/authService.ts";
 import NavBar from "../components/NavBar.tsx";
-import { Box, Flex } from "@chakra-ui/react";
+import { Grid, GridItem, Show } from "@chakra-ui/react";
 import UserProfile from "../components/UserProfile.tsx";
+import { jwtDecode } from "jwt-decode";
 
 const PrivateRoutes = () => {
   const location = useLocation();
@@ -12,12 +13,37 @@ const PrivateRoutes = () => {
     return null;
   }
 
-  return user.token ? (
-    <Box>
+  const isAuthenticated = () => {
+    if (!user.token) {
+      return false;
+    }
+    const decodedToken = jwtDecode(user.token);
+    if (
+      decodedToken === null ||
+      decodedToken.exp === null ||
+      decodedToken.exp === undefined
+    ) {
+      return false;
+    }
+    const currentDate = new Date();
+    return decodedToken.exp * 1000 >= currentDate.getTime();
+  };
+
+  return isAuthenticated() ? (
+    <>
       <NavBar />
-      <Box padding={5}>
-        <Flex align="center">
-          <Box w="10%" marginRight={10}>
+      <Grid
+        templateAreas={{
+          base: `"main"`,
+          lg: `"aside main"`,
+        }}
+        templateColumns={{
+          base: "1fr",
+          lg: "300px 1fr",
+        }}
+      >
+        <Show above={"lg"}>
+          <GridItem area={"aside"} paddingX={5}>
             <UserProfile
               login={user.login}
               firstName={user.firstName}
@@ -27,11 +53,13 @@ const PrivateRoutes = () => {
               startDate={user.startDate}
               role={user.role}
             />
-          </Box>
+          </GridItem>
+        </Show>
+        <GridItem w="90%" area={"main"} paddingX={5} paddingY={10}>
           <Outlet />
-        </Flex>
-      </Box>
-    </Box>
+        </GridItem>
+      </Grid>
+    </>
   ) : (
     <Navigate to="/login" replace state={{ from: location }} />
   );

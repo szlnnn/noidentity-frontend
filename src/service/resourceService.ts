@@ -27,8 +27,27 @@ const create = (resource: Resource) => {
   );
 };
 
+const update = (resource: Resource) => {
+  return axios.put(
+    API_URL + "resource",
+    {
+      id: resource.id,
+      name: resource.name,
+      type: resource.type,
+      azureConfig: {
+        tenantId: resource.azureConfig?.tenantId,
+        applicationId: resource.azureConfig?.applicationId,
+        scope: resource.azureConfig?.scope,
+        secret: resource.azureConfig?.secret,
+      },
+    },
+    config,
+  );
+};
+
 const ResourceService = {
   create,
+  update,
 };
 
 export default ResourceService;

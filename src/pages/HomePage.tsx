@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const HomePage = () => {
   return (
     <>
-      <Grid w="70%" gap={4} templateColumns="repeat(3, 1fr)">
+      <Grid gap={4} templateColumns="repeat(3, 1fr)">
         <Link to={"/register"}>
           <GridItem>
             <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
