@@ -145,7 +145,7 @@ const UpdateResourceModalComponent = ({
                 value={azureScope}
                 onChange={handleScopeChange}
               />
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Secret</FormLabel>
               <Input
                 type="text"
                 name="azureSecret"

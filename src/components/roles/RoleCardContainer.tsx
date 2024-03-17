@@ -13,9 +13,6 @@ const RoleCardContainer = ({ children }: Props) => {
         transition: "transform .15s ease-in",
       }}
       borderRadius={"10px"}
-      overflow={"auto"}
-      backgroundColor={"gray.700"}
-      height={150}
     >
       {children}
     </Box>

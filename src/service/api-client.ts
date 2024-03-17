@@ -22,8 +22,24 @@ class ApiClient<T> {
   };
 
   get = (id: number | string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authService.getCurrentUser().token}`,
+      },
+    };
     return axiosInstance
-      .get<T>(this.endpoint + "/" + id)
+      .get<T>(this.endpoint + "/" + id, config)
+      .then((res) => res.data);
+  };
+
+  getAllById = (id: number | string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authService.getCurrentUser().token}`,
+      },
+    };
+    return axiosInstance
+      .get<T>(this.endpoint + "/" + id, config)
       .then((res) => res.data);
   };
 }

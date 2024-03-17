@@ -18,39 +18,35 @@ import {
 import { useRef, useState } from "react";
 import ErrorAlert from "../alerts/ErrorAlert.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import { Role } from "../../entity/Role.ts";
 import RoleService from "../../service/roleService.ts";
-import { Resource } from "../../entity/Resource.ts";
+import Moment from "moment/moment";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  resource: Resource;
+  role: Role;
 }
 
-const CreateRoleModalComponent = ({
-  isOpen,
-  title,
-  onClose,
-  resource,
-}: Props) => {
+const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    type: "ApplicationRole",
-    description: "",
-    created: "",
-    resourceRoleId: "",
-  });
-
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(role.active);
 
   const handleCheckboxChange = () => {
     setChecked(!checked);
   };
+
+  const [formData, setFormData] = useState({
+    name: role.name,
+    type: role.type,
+    description: role.description,
+    created: role.created,
+    resourceRoleId: role.resourceRoleId,
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -62,29 +58,20 @@ const CreateRoleModalComponent = ({
     });
   };
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    RoleService.create({
+    RoleService.update({
+      ...role,
       name: formData.name,
       type: formData.type,
-      active: checked,
-      created: formData.created,
       description: formData.description,
-      resource: resource,
+      created: formData.created,
       resourceRoleId: formData.resourceRoleId,
+      active: checked,
     }).then(
       (response) => {
         if (response.data) {
-          setFormData({
-            ...formData,
-            name: "",
-            type: "ApplicationRole",
-            description: "",
-            created: "",
-            resourceRoleId: "",
-          });
-          setChecked(true);
-          queryClient.invalidateQueries(["roles", resource.id]);
+          queryClient.invalidateQueries(["roles", role.resource.id]);
           onClose();
         }
       },
@@ -107,8 +94,8 @@ const CreateRoleModalComponent = ({
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <form ref={form} onSubmit={handleRegister}>
-            <FormControl isRequired={true}>
+          <form ref={form} onSubmit={handleUpdate}>
+            <FormControl>
               <FormLabel>Name</FormLabel>
               <Input
                 type="text"
@@ -118,12 +105,12 @@ const CreateRoleModalComponent = ({
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Role Type</FormLabel>
+              <FormLabel>Type</FormLabel>
               <Select
                 name="type"
                 value={formData.type}
-                onChange={handleChange}
                 mb={6}
+                onChange={handleChange}
               >
                 <option value="Licence">Licence</option>
                 <option value="ApplicationRole">ApplicationRole</option>
@@ -152,7 +139,7 @@ const CreateRoleModalComponent = ({
               <Input
                 type="date"
                 name="created"
-                value={formData.created}
+                value={Moment(formData.created).format("yyyy-MM-DD")}
                 onChange={handleChange}
               />
               <FormLabel>Resource Role Object Id</FormLabel>
@@ -188,4 +175,4 @@ const CreateRoleModalComponent = ({
   );
 };
 
-export default CreateRoleModalComponent;
+export default UpdateRoleModalComponent;
