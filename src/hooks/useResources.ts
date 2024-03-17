@@ -4,10 +4,10 @@ import { Resource } from "../entity/Resource.ts";
 
 const apiClient = new ApiClient<Resource[]>("/resource");
 
-const useUsers = () =>
+const useResources = () =>
   useQuery({
     queryKey: ["resources"],
     queryFn: apiClient.getAll,
   });
 
-export default useUsers;
+export default useResources;

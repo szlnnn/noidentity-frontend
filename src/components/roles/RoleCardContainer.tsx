@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
-const ResourceCardContainer = ({ children }: Props) => {
+const RoleCardContainer = ({ children }: Props) => {
   return (
     <Box
       _hover={{
@@ -14,10 +14,12 @@ const ResourceCardContainer = ({ children }: Props) => {
       }}
       borderRadius={"10px"}
       overflow={"auto"}
+      backgroundColor={"gray.700"}
+      height={150}
     >
       {children}
     </Box>
   );
 };
 
-export default ResourceCardContainer;
+export default RoleCardContainer;

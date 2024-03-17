@@ -3,6 +3,7 @@ import {
   CardBody,
   Heading,
   HStack,
+  Tooltip,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -11,6 +12,8 @@ import ResourceIcon from "./ResourceIcon.tsx";
 import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
 import UpdateResourceModalComponent from "./UpdateResourceModalComponent.tsx";
+import { PiListPlusBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 interface Props {
   resource: Resource;
@@ -31,9 +34,18 @@ const ResourceCard = ({ resource }: Props) => {
         <CardBody>
           <VStack>
             <ResourceIcon resource={resource} />
-            <HStack>
+            <HStack width={"100%"} justifyContent="space-between">
               <Heading fontSize={"2xl"}>{resource.name}</Heading>
-              <FaRegEdit onClick={handleEditClick} />
+              <VStack>
+                <FaRegEdit size={20} onClick={handleEditClick} />
+                <Link to={"/resources/roles/" + resource.id}>
+                  <Tooltip hasArrow label="Manage Roles" placement="right-end">
+                    <span>
+                      <PiListPlusBold size={25} />
+                    </span>
+                  </Tooltip>
+                </Link>
+              </VStack>
             </HStack>
           </VStack>
         </CardBody>
@@ -42,7 +54,7 @@ const ResourceCard = ({ resource }: Props) => {
         <UpdateResourceModalComponent
           isOpen={isOpen}
           onClose={onClose}
-          title={"Add new Resource"}
+          title={"Edit resource"}
           resource={resource}
         />
       )}

@@ -13,31 +13,44 @@ import {
   Select,
   Box,
   HStack,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import ErrorAlert from "../alerts/ErrorAlert.tsx";
-import ResourceService from "../../service/resourceService.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import RoleService from "../../service/roleService.ts";
+import { Resource } from "../../entity/Resource.ts";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  resource: Resource;
 }
 
-const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
+const CreateRoleModalComponent = ({
+  isOpen,
+  title,
+  onClose,
+  resource,
+}: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
     name: "",
-    type: "Offline",
-    azureTenantId: "",
-    azureApplicationId: "",
-    azureScope: "",
-    azureSecret: "",
+    type: "ApplicationRole",
+    description: "",
+    created: "",
+    resourceRoleId: "",
   });
+
+  const [checked, setChecked] = useState(true);
+
+  const handleCheckboxChange = () => {
+    setChecked(!checked);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -49,50 +62,29 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
     });
   };
 
-  const handleChangeType = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    if (e.target.value === "Offline") {
-      setFormData({
-        ...formData,
-        type: e.target.value,
-        azureTenantId: "",
-        azureApplicationId: "",
-        azureScope: "",
-        azureSecret: "",
-      });
-    } else {
-      setFormData({
-        ...formData,
-        type: e.target.value,
-      });
-    }
-  };
-
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    ResourceService.create({
+    RoleService.create({
       name: formData.name,
       type: formData.type,
-      azureConfig: {
-        tenantId: formData.azureTenantId,
-        applicationId: formData.azureApplicationId,
-        scope: formData.azureScope,
-        secret: formData.azureSecret,
-      },
+      active: checked,
+      created: formData.created,
+      description: formData.description,
+      resource: resource,
+      resourceRoleId: formData.resourceRoleId,
     }).then(
       (response) => {
         if (response.data) {
           setFormData({
             ...formData,
             name: "",
-            type: "Offline",
-            azureTenantId: "",
-            azureApplicationId: "",
-            azureScope: "",
-            azureSecret: "",
+            type: "ApplicationRole",
+            description: "",
+            created: "",
+            resourceRoleId: "",
           });
-          queryClient.invalidateQueries(["resources"]);
+          setChecked(true);
+          queryClient.invalidateQueries(["roles"]);
           onClose();
         }
       },
@@ -126,45 +118,48 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Resource Type</FormLabel>
+              <FormLabel>Role Type</FormLabel>
               <Select
                 name="type"
                 value={formData.type}
-                onChange={handleChangeType}
+                onChange={handleChange}
                 mb={6}
               >
-                <option value="Azure">Azure</option>
-                <option value="Offline">Offline</option>
+                <option value="Licence">Licence</option>
+                <option value="ApplicationRole">ApplicationRole</option>
               </Select>
             </FormControl>
 
-            <FormControl isDisabled={formData.type === "Offline"}>
-              <FormLabel>Azure Tenant Id</FormLabel>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
               <Input
                 type="text"
-                name="azureTenantId"
-                value={formData.azureTenantId}
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
               />
-              <FormLabel>Azure Application Id</FormLabel>
+              <Checkbox
+                marginTop={3}
+                marginBottom={3}
+                type="checkbox"
+                name="active"
+                checked={checked}
+                onChange={handleCheckboxChange}
+              >
+                Active
+              </Checkbox>
+              <FormLabel>Created</FormLabel>
               <Input
-                type="text"
-                name="azureApplicationId"
-                value={formData.azureApplicationId}
+                type="date"
+                name="created"
+                value={formData.created}
                 onChange={handleChange}
               />
-              <FormLabel>Azure Scope</FormLabel>
+              <FormLabel>Resource Role Object Id</FormLabel>
               <Input
                 type="text"
-                name="azureScope"
-                value={formData.azureScope}
-                onChange={handleChange}
-              />
-              <FormLabel>Azure Secret</FormLabel>
-              <Input
-                type="text"
-                name="azureSecret"
-                value={formData.azureSecret}
+                name="resourceRoleId"
+                value={formData.resourceRoleId}
                 onChange={handleChange}
               />
             </FormControl>
@@ -193,4 +188,4 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
   );
 };
 
-export default CreateResourceModalComponent;
+export default CreateRoleModalComponent;
