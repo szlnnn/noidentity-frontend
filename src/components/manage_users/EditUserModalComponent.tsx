@@ -10,7 +10,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
+  Select as ChakraSelect,
   Box,
   HStack,
 } from "@chakra-ui/react";
@@ -20,6 +20,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import UserService from "../../service/userService.ts";
 import { User } from "../../entity/User.ts";
 import Moment from "moment";
+import Select, { SingleValue } from "react-select";
+import customStylesOrganization from "../../styles/react-select-org.ts";
+import { Organization } from "../../entity/Organization.ts";
+import useOrganizations from "../../hooks/useOrganizations.ts";
 
 interface Props {
   isOpen: boolean;
@@ -33,6 +37,10 @@ const EditUserModalComponent = ({ isOpen, title, onClose, user }: Props) => {
   const [error, setError] = useState("");
 
   const queryClient = useQueryClient();
+  const [selectedOrganization, setSelectedOrganization] = useState<
+    SingleValue<Organization>
+  >(user.organization || null);
+  const { data: orgs, isLoading } = useOrganizations();
 
   const [updatedUser, setUpdatedUser] = useState(user);
 
@@ -46,9 +54,18 @@ const EditUserModalComponent = ({ isOpen, title, onClose, user }: Props) => {
     });
   };
 
+  const handleOrganizationChange = (
+    selectedOption: SingleValue<Organization>,
+  ) => {
+    setSelectedOrganization(selectedOption);
+  };
+
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    UserService.update(updatedUser).then(
+    UserService.update({
+      ...updatedUser,
+      organization: selectedOrganization || undefined,
+    }).then(
       (response) => {
         if (response.data) {
           queryClient.invalidateQueries(["users"]);
@@ -131,7 +148,7 @@ const EditUserModalComponent = ({ isOpen, title, onClose, user }: Props) => {
             </FormControl>
             <FormControl>
               <FormLabel>Role</FormLabel>
-              <Select
+              <ChakraSelect
                 placeholder="Select role"
                 name="role"
                 value={updatedUser?.role}
@@ -140,8 +157,18 @@ const EditUserModalComponent = ({ isOpen, title, onClose, user }: Props) => {
               >
                 <option value="USER">User</option>
                 <option value="ADMIN">Admin</option>
-              </Select>
+              </ChakraSelect>
             </FormControl>
+            <Select
+              options={orgs}
+              styles={customStylesOrganization}
+              value={selectedOrganization}
+              onChange={handleOrganizationChange}
+              placeholder="Select an organization"
+              isLoading={isLoading}
+              isClearable={true}
+              getOptionLabel={(option) => `${option.name} : ${option.company}`}
+            />
             <HStack marginTop={3}>
               <Button type="submit" colorScheme="blue" mr={3}>
                 Save

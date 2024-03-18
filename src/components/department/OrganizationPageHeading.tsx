@@ -1,36 +1,36 @@
 import { useState } from "react";
 import { Button, Heading, HStack, useDisclosure } from "@chakra-ui/react";
-import CreateResourceModalComponent from "./CreateResourceModalComponent.tsx";
+import CreateDepartmentModalComponent from "./CreateDepartmentModalComponent.tsx";
 
-const ResourcePageHeading = () => {
-  const [isResourceCreate, setIsResourceCreate] = useState(false);
+const OrganizationPageHeading = () => {
+  const [isOrganizationCreate, setIsOrganizationCreate] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleEditClick = () => {
-    setIsResourceCreate(true);
+    setIsOrganizationCreate(true);
     onOpen();
   };
   return (
     <>
       <HStack marginBottom={5} width="100%" justifyContent="space-between">
-        <Heading>Manage Resources</Heading>
+        <Heading>Manage Organizations</Heading>
         <Button
           width="20%"
           colorScheme="teal"
           onClick={() => handleEditClick()}
         >
-          Add new Resource
+          Add new Organization
         </Button>
       </HStack>
-      {isResourceCreate && (
-        <CreateResourceModalComponent
+      {isOrganizationCreate && (
+        <CreateDepartmentModalComponent
           isOpen={isOpen}
           onClose={onClose}
-          title={"Add new Resource"}
+          title={"Add new Organization"}
         />
       )}
     </>
   );
 };
 
-export default ResourcePageHeading;
+export default OrganizationPageHeading;

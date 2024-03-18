@@ -10,14 +10,19 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   Box,
   HStack,
+  Select as ChakraSelect,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import AuthService from "../../service/authService.ts";
 import ErrorAlert from "../alerts/ErrorAlert.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import { SingleValue } from "react-select";
+import Select from "react-select";
+import { Organization } from "../../entity/Organization.ts";
+import useOrganizations from "../../hooks/useOrganizations.ts";
+import customStylesOrganization from "../../styles/react-select-org.ts";
 
 interface Props {
   isOpen: boolean;
@@ -28,9 +33,11 @@ interface Props {
 const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
-
+  const [selectedOrganization, setSelectedOrganization] =
+    useState<SingleValue<Organization>>(null);
   const queryClient = useQueryClient();
 
+  const { data: orgs, isLoading } = useOrganizations();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -41,6 +48,12 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
     password: "",
     role: "user",
   });
+
+  const handleOrganizationChange = (
+    selectedOption: SingleValue<Organization>,
+  ) => {
+    setSelectedOrganization(selectedOption);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -63,6 +76,7 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
         startDate: formData.startDate,
         endDate: formData.endDate,
         role: formData.role,
+        organization: selectedOrganization || undefined,
       },
       formData.password,
       formData.role,
@@ -160,8 +174,8 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
             </FormControl>
             <FormControl>
               <FormLabel>Role</FormLabel>
-              <Select
-                placeholder="Select role"
+              <ChakraSelect
+                placeholder={"Select Role"}
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
@@ -169,8 +183,21 @@ const RegisterUserModalComponent = ({ isOpen, title, onClose }: Props) => {
               >
                 <option value="USER">User</option>
                 <option value="ADMIN">Admin</option>
-              </Select>
+              </ChakraSelect>
             </FormControl>
+            <FormLabel>Organization</FormLabel>
+
+            <Select
+              options={orgs}
+              styles={customStylesOrganization}
+              value={selectedOrganization}
+              onChange={handleOrganizationChange}
+              placeholder="Select an organization"
+              isLoading={isLoading}
+              isClearable={true}
+              getOptionLabel={(option) => `${option.name} : ${option.company}`}
+            />
+
             <HStack marginTop={3}>
               <Button type="submit" colorScheme="blue" mr={3}>
                 Save

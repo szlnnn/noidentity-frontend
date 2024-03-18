@@ -16,14 +16,16 @@ const HomePage = () => {
         <GridItem>
           <Link to={"/resources"}>
             <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              Menu Item 2
+              Manage Resources and Roles
             </Box>
           </Link>
         </GridItem>
         <GridItem>
-          <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-            Menu Item 3
-          </Box>
+          <Link to={"/departments"}>
+            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
+              Manage Organizations
+            </Box>
+          </Link>
         </GridItem>
         {/* Add more menu items as needed */}
       </Grid>

@@ -21,6 +21,7 @@ const update = (user: User) => {
       email: user.email,
       startDate: user.startDate,
       endDate: user.endDate,
+      organization: user.organization,
     },
     config,
   );

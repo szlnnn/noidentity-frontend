@@ -42,6 +42,7 @@ const UserList = () => {
             <Th>End Date</Th>
             <Th>ID</Th>
             <Th>Role</Th>
+            <Th>Organization</Th>
             <Th>Action</Th>
           </Tr>
         </Thead>
@@ -56,6 +57,7 @@ const UserList = () => {
               <Td>{Moment(user?.endDate).format("yyyy-MM-DD")}</Td>
               <Td>{user.id}</Td>
               <Td>{user.role}</Td>
+              <Td>{user.organization?.name}</Td>
               <Td>
                 <Button
                   colorScheme="blue"

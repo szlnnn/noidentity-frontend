@@ -38,7 +38,6 @@ const RolesIcons = ({ role }: Props) => {
           </Tooltip>
         )}
       </VStack>
-
       {isEdit && (
         <UpdateRoleModalComponent
           isOpen={isOpen}

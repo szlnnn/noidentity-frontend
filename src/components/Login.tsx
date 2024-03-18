@@ -23,7 +23,6 @@ const Login = () => {
 
   const handleLogin = () => {
     setMessage("");
-    console.log(username);
     AuthService.login(username, password).then(
       () => {
         navigate("/");

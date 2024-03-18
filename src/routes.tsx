@@ -6,6 +6,7 @@ import UserEditPage from "./pages/UserEditPage.tsx";
 import PrivateRoutes from "./router/PrivateRoutes.tsx";
 import ManageResourcePage from "./pages/ManageResourcePage.tsx";
 import RolesGridPage from "./pages/RolesGridPage.tsx";
+import ManageDepartmentsPage from "./pages/ManageDepartmentsPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
         element: <ManageResourcePage />,
       },
       { path: "/resources/roles/:id", element: <RolesGridPage /> },
+      {
+        path: "/departments",
+        element: <ManageDepartmentsPage />,
+      },
     ],
   },
 ]);

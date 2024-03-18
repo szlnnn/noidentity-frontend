@@ -1,3 +1,5 @@
+import { Organization } from "./Organization.ts";
+
 export type User = {
   id?: string;
   firstName: string;
@@ -7,4 +9,5 @@ export type User = {
   endDate: string;
   email: string;
   role: string;
+  organization?: Organization;
 };
