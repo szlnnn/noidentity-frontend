@@ -1,3 +1,5 @@
+import { User } from "./User.ts";
+
 export type Resource = {
   id?: string;
   name: string;
@@ -8,4 +10,5 @@ export type Resource = {
     scope: string;
     secret: string;
   };
+  appOwner?: User;
 };

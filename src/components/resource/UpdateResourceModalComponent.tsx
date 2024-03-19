@@ -10,7 +10,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
+  Select as ChakraSelect,
   Box,
   HStack,
 } from "@chakra-ui/react";
@@ -19,6 +19,10 @@ import ErrorAlert from "../alerts/ErrorAlert.tsx";
 import ResourceService from "../../service/resourceService.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { Resource } from "../../entity/Resource.ts";
+import Select, { SingleValue } from "react-select";
+import { User } from "../../entity/User.ts";
+import useUsers from "../../hooks/useUsers.ts";
+import customStyles from "../../styles/react-select.ts";
 
 interface Props {
   isOpen: boolean;
@@ -36,6 +40,16 @@ const UpdateResourceModalComponent = ({
   const form = useRef(null);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
+
+  const [selectedUser, setSelectedUser] = useState<SingleValue<User>>(
+    resource.appOwner || null,
+  );
+  const { data: users, isLoading } = useUsers();
+
+  const handleManagerChange = (selectedOption: SingleValue<User>) => {
+    setSelectedUser(selectedOption);
+  };
+
   const [azureTenant, setAzureTenant] = useState(
     resource.azureConfig?.tenantId || "",
   );
@@ -76,6 +90,7 @@ const UpdateResourceModalComponent = ({
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(selectedUser);
     ResourceService.update({
       ...resource,
       azureConfig: {
@@ -84,6 +99,7 @@ const UpdateResourceModalComponent = ({
         scope: azureScope,
         secret: azureSecret,
       },
+      appOwner: selectedUser || undefined,
     }).then(
       (response) => {
         if (response.data) {
@@ -115,12 +131,27 @@ const UpdateResourceModalComponent = ({
               <FormLabel>Name</FormLabel>
               <Input type="text" name="name" value={resource.name} />
             </FormControl>
+            <FormControl isRequired={true}>
+              <FormLabel>Application Owner</FormLabel>
+              <Select
+                options={users?.filter((u) => u.login !== "noadmin")}
+                styles={customStyles}
+                value={selectedUser}
+                onChange={handleManagerChange}
+                placeholder="Select a manager..."
+                isLoading={isLoading}
+                isClearable={true}
+                getOptionLabel={(option) =>
+                  `${option.firstName} ${option.lastName} : ${option.login}`
+                }
+              />
+            </FormControl>
             <FormControl isDisabled={true}>
               <FormLabel>Resource Type</FormLabel>
-              <Select name="type" value={resource.type} mb={6}>
+              <ChakraSelect name="type" value={resource.type} mb={6}>
                 <option value="Azure">Azure</option>
                 <option value="Offline">Offline</option>
-              </Select>
+              </ChakraSelect>
             </FormControl>
 
             <FormControl isDisabled={resource.type === "Offline"}>

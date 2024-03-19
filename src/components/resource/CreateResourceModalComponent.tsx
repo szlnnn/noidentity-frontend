@@ -10,7 +10,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
+  Select as ChakraSelect,
   Box,
   HStack,
 } from "@chakra-ui/react";
@@ -18,6 +18,10 @@ import { useRef, useState } from "react";
 import ErrorAlert from "../alerts/ErrorAlert.tsx";
 import ResourceService from "../../service/resourceService.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import customStyles from "../../styles/react-select.ts";
+import Select, { SingleValue } from "react-select";
+import { User } from "../../entity/User.ts";
+import useUsers from "../../hooks/useUsers.ts";
 
 interface Props {
   isOpen: boolean;
@@ -29,7 +33,12 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
   const form = useRef(null);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
+  const [selectedUser, setSelectedUser] = useState<SingleValue<User>>(null);
+  const { data: users, isLoading } = useUsers();
 
+  const handleManagerChange = (selectedOption: SingleValue<User>) => {
+    setSelectedUser(selectedOption);
+  };
   const [formData, setFormData] = useState({
     name: "",
     type: "Offline",
@@ -80,6 +89,7 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
         scope: formData.azureScope,
         secret: formData.azureSecret,
       },
+      appOwner: selectedUser || undefined,
     }).then(
       (response) => {
         if (response.data) {
@@ -92,6 +102,7 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
             azureScope: "",
             azureSecret: "",
           });
+          setSelectedUser(null);
           queryClient.invalidateQueries(["resources"]);
           onClose();
         }
@@ -125,9 +136,25 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
                 onChange={handleChange}
               />
             </FormControl>
+            <FormControl isRequired={true}>
+              <FormLabel>Application Owner</FormLabel>
+              <Select
+                options={users?.filter((u) => u.login !== "noadmin")}
+                styles={customStyles}
+                value={selectedUser}
+                onChange={handleManagerChange}
+                placeholder="Select a manager..."
+                isLoading={isLoading}
+                isClearable={true}
+                getOptionLabel={(option) =>
+                  `${option.firstName} ${option.lastName} : ${option.login}`
+                }
+              />
+            </FormControl>
+
             <FormControl>
               <FormLabel>Resource Type</FormLabel>
-              <Select
+              <ChakraSelect
                 name="type"
                 value={formData.type}
                 onChange={handleChangeType}
@@ -135,7 +162,7 @@ const CreateResourceModalComponent = ({ isOpen, title, onClose }: Props) => {
               >
                 <option value="Azure">Azure</option>
                 <option value="Offline">Offline</option>
-              </Select>
+              </ChakraSelect>
             </FormControl>
 
             <FormControl isDisabled={formData.type === "Offline"}>

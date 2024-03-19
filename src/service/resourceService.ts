@@ -22,6 +22,7 @@ const create = (resource: Resource) => {
         scope: resource.azureConfig?.scope,
         secret: resource.azureConfig?.secret,
       },
+      appOwner: resource.appOwner,
     },
     config,
   );
@@ -40,6 +41,7 @@ const update = (resource: Resource) => {
         scope: resource.azureConfig?.scope,
         secret: resource.azureConfig?.secret,
       },
+      appOwner: resource.appOwner,
     },
     config,
   );
