@@ -27,7 +27,13 @@ const HomePage = () => {
             </Box>
           </Link>
         </GridItem>
-        {/* Add more menu items as needed */}
+        <GridItem>
+          <Link to={"/request"}>
+            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
+              Request Rights
+            </Box>
+          </Link>
+        </GridItem>
       </Grid>
     </>
   );

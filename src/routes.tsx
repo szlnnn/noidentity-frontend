@@ -7,6 +7,7 @@ import PrivateRoutes from "./router/PrivateRoutes.tsx";
 import ManageResourcePage from "./pages/ManageResourcePage.tsx";
 import RolesGridPage from "./pages/RolesGridPage.tsx";
 import ManageDepartmentsPage from "./pages/ManageDepartmentsPage.tsx";
+import RequestPage from "./pages/RequestPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/departments",
         element: <ManageDepartmentsPage />,
+      },
+      {
+        path: "/request",
+        element: <RequestPage />,
       },
     ],
   },
