@@ -13,7 +13,6 @@ const ResourceCardContainer = ({ children }: Props) => {
         transition: "transform .15s ease-in",
       }}
       borderRadius={"10px"}
-      overflow={"auto"}
     >
       {children}
     </Box>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUserStore } from "../../../stores/requestUser.ts";
+import { useUserStore } from "../../../stores/requestUserStore.ts";
 import useUsers from "../../../hooks/useUsers.ts";
 import {
   Box,
@@ -10,11 +10,12 @@ import {
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
+import useCounterStore from "../../../stores/stepStore.ts";
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { selectUser, removeSelectedUser } = useUserStore();
-
+  const { count, reset } = useCounterStore();
   const { data: users } = useUsers();
   const filteredUsers = users?.filter(
     (user) =>
@@ -22,7 +23,9 @@ const UserSearch = () => {
       `${user.login}`.toLowerCase() !== "noadmin" &&
       `${user.login}`.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
+  if (count != 0) {
+    reset();
+  }
   const handleRemoveSelectedUser = () => {
     removeSelectedUser();
     setSearchTerm("");

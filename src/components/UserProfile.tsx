@@ -4,7 +4,13 @@ import { User } from "../entity/User.ts";
 
 const UserProfile = (user: User) => {
   return (
-    <Box maxW="md" borderRadius="lg" overflow="hidden" marginTop={37}>
+    <Box
+      maxW="md"
+      borderRadius="lg"
+      overflow="hidden"
+      marginTop={37}
+      borderRightWidth={"2px"}
+    >
       <Stack direction="column" spacing={4} p={4}>
         <Image src={profile_placeholder} alt="Profile" borderRadius="full" />
         <Box>

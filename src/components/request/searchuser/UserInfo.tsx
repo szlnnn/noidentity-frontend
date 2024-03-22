@@ -1,5 +1,5 @@
 import { Box, Heading, Stack, Text } from "@chakra-ui/react";
-import { useUserStore } from "../../../stores/requestUser.ts";
+import { useUserStore } from "../../../stores/requestUserStore.ts";
 import Moment from "moment/moment";
 
 const UserInfo = () => {

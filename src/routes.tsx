@@ -8,6 +8,12 @@ import ManageResourcePage from "./pages/ManageResourcePage.tsx";
 import RolesGridPage from "./pages/RolesGridPage.tsx";
 import ManageDepartmentsPage from "./pages/ManageDepartmentsPage.tsx";
 import RequestPage from "./pages/RequestPage.tsx";
+import RequestSearchUser from "./components/request/searchuser/RequestSearchUser.tsx";
+import RequestResourceGrid from "./components/request/selectrights/RequestResourceGrid.tsx";
+import RequestRoleGrid from "./components/request/selectrights/RequestRoleGrid.tsx";
+import ConfirmRequest from "./components/request/confirm/ConfirmRequest.tsx";
+import SuccessRequest from "./components/request/success-request/SuccessRequest.tsx";
+import RequestSelectRolePage from "./pages/RequestSelectRolePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +45,34 @@ const router = createBrowserRouter([
       {
         path: "/request",
         element: <RequestPage />,
+        children: [
+          {
+            index: true,
+            element: <RequestSearchUser />,
+          },
+          {
+            path: "/request/resource",
+            element: <RequestSelectRolePage />,
+            children: [
+              {
+                index: true,
+                element: <RequestResourceGrid />,
+              },
+              {
+                path: "/request/resource/:id/roles",
+                element: <RequestRoleGrid />,
+              },
+            ],
+          },
+          {
+            path: "/request/confirm",
+            element: <ConfirmRequest />,
+          },
+          {
+            path: "/request/success",
+            element: <SuccessRequest />,
+          },
+        ],
       },
     ],
   },

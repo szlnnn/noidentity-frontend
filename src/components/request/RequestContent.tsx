@@ -8,57 +8,90 @@ import {
   Button,
   HStack,
   useDisclosure,
-  useSteps,
 } from "@chakra-ui/react";
 import steps from "../constants/steps.ts";
 import RequestFooter from "./RequestFooter.tsx";
-import RequestSearchUser from "./searchuser/RequestSearchUser.tsx";
-import { useUserStore } from "../../stores/requestUser.ts";
+import { useUserStore } from "../../stores/requestUserStore.ts";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import useRoleStore from "../../stores/requestRightsStore.ts";
+import useCounterStore from "../../stores/stepStore.ts";
 
 const RequestContent = () => {
-  const { activeStep, setActiveStep } = useSteps({
-    index: 0,
-    count: steps.length,
-  });
-  const selectedUser = useUserStore((state) => state.selectedUser);
+  const { selectedUser, removeSelectedUser } = useUserStore();
+  const { roles, removeRole } = useRoleStore();
+  const { count, increment, decrement, reset } = useCounterStore();
+  const navigate = useNavigate();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
+  console.log(count);
   const handlePreviousStep = () => {
-    if (activeStep > 0) return setActiveStep(activeStep - 1);
-    else return 0;
+    const newStep = count - 1;
+    if (newStep === -1) {
+      removeSelectedUser();
+      roles.forEach((role) => removeRole(role.id!));
+      reset();
+      navigate("/");
+    }
+    if (newStep === 0) {
+      decrement();
+      navigate("/request");
+    }
+    if (newStep === 1) {
+      decrement();
+      navigate("/request/resource");
+    }
   };
 
   const handleNextStep = () => {
     if (!selectedUser) {
       onOpen();
-      return activeStep;
+      return count;
     }
-    if (activeStep === 3) return 3;
-    else return setActiveStep(activeStep + 1);
+
+    if (count === 3) return 3;
+
+    const newActiveStep = count + 1;
+    if (newActiveStep === 1) {
+      navigate("/request/resource");
+    }
+    if (newActiveStep === 2) {
+      navigate("/request/confirm");
+    }
+    if (newActiveStep === 3) {
+      navigate("/request/success");
+    }
+    increment();
   };
 
   return (
     <>
-      {activeStep === 0 && <RequestSearchUser />}
-      <HStack justifyContent={"right"} width={"80%"} padding={10}>
-        <Button
-          backgroundColor={"#8B4950"}
-          onClick={handlePreviousStep}
-          padding={5}
+      {count !== 3 && (
+        <HStack
+          justifyContent={"right"}
+          width={"80%"}
+          padding={10}
+          marginTop={20}
         >
-          Previous
-        </Button>
-        <Button
-          backgroundColor={"#006969"}
-          onClick={handleNextStep}
-          padding={5}
-        >
-          Next
-        </Button>
-      </HStack>
-      <RequestFooter steps={steps} activeStep={activeStep} />
+          <Button
+            backgroundColor={"#8B4950"}
+            onClick={handlePreviousStep}
+            padding={5}
+          >
+            {count === 0 ? "Cancel" : "Previous"}
+          </Button>
+          <Button
+            backgroundColor={"#006969"}
+            onClick={handleNextStep}
+            padding={5}
+          >
+            {count === 2 ? "Confirm" : "Next"}
+          </Button>
+        </HStack>
+      )}
+
+      <RequestFooter steps={steps} activeStep={count} />
 
       <AlertDialog
         isOpen={isOpen}
