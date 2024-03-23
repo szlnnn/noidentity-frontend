@@ -49,6 +49,11 @@ const Login = () => {
       borderWidth={1}
       borderRadius={8}
       boxShadow="lg"
+      onKeyUp={(event) => {
+        if (event.key === "Enter") {
+          handleLogin();
+        }
+      }}
     >
       <VStack>
         <Image src={logoSmall} height={66} width={350} />
