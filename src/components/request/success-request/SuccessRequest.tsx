@@ -6,7 +6,11 @@ import useCounterStore from "../../../stores/stepStore.ts";
 import useRoleStore from "../../../stores/requestRightsStore.ts";
 import { useUserStore } from "../../../stores/requestUserStore.ts";
 
-const ConfirmRequest = () => {
+interface Props {
+  navigateTo: string;
+}
+
+const ConfirmRequest = ({ navigateTo }: Props) => {
   const navigate = useNavigate();
   const { reset } = useCounterStore();
   const { clearStorage } = useRoleStore();
@@ -16,7 +20,7 @@ const ConfirmRequest = () => {
       reset();
       clearStorage();
       removeSelectedUser();
-      navigate("/");
+      navigate(navigateTo);
     }, 2000);
     return () => clearTimeout(timer);
   }, [navigate]);

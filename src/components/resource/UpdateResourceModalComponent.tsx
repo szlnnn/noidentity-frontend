@@ -138,7 +138,7 @@ const UpdateResourceModalComponent = ({
                 styles={customStyles}
                 value={selectedUser}
                 onChange={handleManagerChange}
-                placeholder="Select a manager..."
+                placeholder="Select an application owner..."
                 isLoading={isLoading}
                 isClearable={true}
                 getOptionLabel={(option) =>

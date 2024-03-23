@@ -14,6 +14,9 @@ import RequestRoleGrid from "./components/request/selectrights/RequestRoleGrid.t
 import ConfirmRequest from "./components/request/confirm/ConfirmRequest.tsx";
 import SuccessRequest from "./components/request/success-request/SuccessRequest.tsx";
 import RequestSelectRolePage from "./pages/RequestSelectRolePage.tsx";
+import RequestTasksPage from "./pages/RequestTasksPage.tsx";
+import TaskInfo from "./components/request-task/TaskInfo.tsx";
+import NoTaskSelected from "./components/request-task/NoTaskSelected.tsx";
 
 const router = createBrowserRouter([
   {
@@ -70,7 +73,25 @@ const router = createBrowserRouter([
           },
           {
             path: "/request/success",
-            element: <SuccessRequest />,
+            element: <SuccessRequest navigateTo={"/"} />,
+          },
+        ],
+      },
+      {
+        path: "/tasks",
+        element: <RequestTasksPage />,
+        children: [
+          {
+            index: true,
+            element: <NoTaskSelected />,
+          },
+          {
+            path: "/tasks/:id",
+            element: <TaskInfo />,
+          },
+          {
+            path: "/tasks/success",
+            element: <SuccessRequest navigateTo={"/tasks"} />,
           },
         ],
       },

@@ -12,20 +12,23 @@ import {
 import steps from "../constants/steps.ts";
 import RequestFooter from "./RequestFooter.tsx";
 import { useUserStore } from "../../stores/requestUserStore.ts";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useRoleStore from "../../stores/requestRightsStore.ts";
 import useCounterStore from "../../stores/stepStore.ts";
+import RequestService from "../../service/requestService.ts";
+import authService from "../../service/authService.ts";
 
 const RequestContent = () => {
   const { selectedUser, removeSelectedUser } = useUserStore();
   const { roles, removeRole } = useRoleStore();
   const { count, increment, decrement, reset } = useCounterStore();
   const navigate = useNavigate();
+  const logonUser = authService.getCurrentUser();
+  const [error, setError] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
-  console.log(count);
   const handlePreviousStep = () => {
     const newStep = count - 1;
     if (newStep === -1) {
@@ -45,7 +48,7 @@ const RequestContent = () => {
   };
 
   const handleNextStep = () => {
-    if (!selectedUser) {
+    if (!selectedUser || error) {
       onOpen();
       return count;
     }
@@ -60,6 +63,15 @@ const RequestContent = () => {
       navigate("/request/confirm");
     }
     if (newActiveStep === 3) {
+      RequestService.postRequest(logonUser, selectedUser, roles, []).then(
+        (error) => {
+          const resMessage =
+            (error.data && error.data.message) ||
+            error.statusText ||
+            error.toString();
+          setError(resMessage);
+        },
+      );
       navigate("/request/success");
     }
     increment();
@@ -106,6 +118,7 @@ const RequestContent = () => {
 
             <AlertDialogBody>
               Please provide the needed information!
+              {error}
             </AlertDialogBody>
 
             <AlertDialogFooter>

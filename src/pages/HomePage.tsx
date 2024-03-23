@@ -34,6 +34,13 @@ const HomePage = () => {
             </Box>
           </Link>
         </GridItem>
+        <GridItem>
+          <Link to={"/tasks"}>
+            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
+              My Tasks
+            </Box>
+          </Link>
+        </GridItem>
       </Grid>
     </>
   );
