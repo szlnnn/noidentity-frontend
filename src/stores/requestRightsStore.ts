@@ -7,7 +7,7 @@ interface RoleState {
   addRole: (role: Role) => void;
   removeRole: (roleId: string) => void;
   getRoleById: (roleId: string) => Role | undefined;
-  clearStorage: () => void; // Method to clear the storage
+  clearStorage: () => void;
 }
 
 const useRoleStore = create(
@@ -23,13 +23,12 @@ const useRoleStore = create(
         return get().roles.find((role) => role.id === roleId);
       },
       clearStorage: () => {
-        localStorage.removeItem("role-storage"); // Use the key you defined in persist configuration
-        set(() => ({ roles: [] })); // Optionally reset state to initial
+        localStorage.removeItem("role-storage");
+        set(() => ({ roles: [] }));
       },
     }),
     {
-      name: "role-storage", // The key used for storing the state in localStorage
-      // You can add other persist options here if needed
+      name: "role-storage",
     },
   ),
 );
