@@ -18,10 +18,12 @@ import useRoleStore from "../../stores/requestRightsStore.ts";
 import useCounterStore from "../../stores/stepStore.ts";
 import RequestService from "../../service/requestService.ts";
 import authService from "../../service/authService.ts";
+import useRevokeRoleStore from "../../stores/revokeRightsStore.ts";
 
 const RequestContent = () => {
   const { selectedUser, removeSelectedUser } = useUserStore();
   const { roles, removeRole } = useRoleStore();
+  const { rolesToRevoke, clearRevokedRolesStorage } = useRevokeRoleStore();
   const { count, increment, decrement, reset } = useCounterStore();
   const navigate = useNavigate();
   const logonUser = authService.getCurrentUser();
@@ -34,6 +36,7 @@ const RequestContent = () => {
     if (newStep === -1) {
       removeSelectedUser();
       roles.forEach((role) => removeRole(role.id!));
+      clearRevokedRolesStorage();
       reset();
       navigate("/");
     }
@@ -63,15 +66,18 @@ const RequestContent = () => {
       navigate("/request/confirm");
     }
     if (newActiveStep === 3) {
-      RequestService.postRequest(logonUser, selectedUser, roles, []).then(
-        (error) => {
-          const resMessage =
-            (error.data && error.data.message) ||
-            error.statusText ||
-            error.toString();
-          setError(resMessage);
-        },
-      );
+      RequestService.postRequest(
+        logonUser,
+        selectedUser,
+        roles,
+        rolesToRevoke,
+      ).then((error) => {
+        const resMessage =
+          (error.data && error.data.message) ||
+          error.statusText ||
+          error.toString();
+        setError(resMessage);
+      });
       navigate("/request/success");
     }
     increment();

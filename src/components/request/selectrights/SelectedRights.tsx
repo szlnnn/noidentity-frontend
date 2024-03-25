@@ -11,6 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { MdCheckCircle } from "react-icons/md";
 import { Role } from "../../../entity/Role.ts";
+import useRevokeRoleStore from "../../../stores/revokeRightsStore.ts";
+import { FiMinus } from "react-icons/fi";
 
 interface Props {
   isConfirmation: boolean;
@@ -18,6 +20,7 @@ interface Props {
 
 const SelectedRights = ({ isConfirmation }: Props) => {
   const { roles, removeRole } = useRoleStore();
+  const { rolesToRevoke, removeRoleFromRevoke } = useRevokeRoleStore();
 
   const handleButtonClick = () => {
     roles.forEach((role) => removeRole(role.id!));
@@ -29,9 +32,15 @@ const SelectedRights = ({ isConfirmation }: Props) => {
     }
   };
 
+  const handleRevokedListItemClick = (role: Role) => {
+    if (!isConfirmation) {
+      removeRoleFromRevoke(role.id!);
+    }
+  };
+
   return (
     <>
-      {roles.length > 0 && (
+      {roles.length + rolesToRevoke.length > 0 && (
         <VStack>
           <Box justifyContent={"flex-start"} marginBottom={20} marginRight={20}>
             <Heading>Selected Rights</Heading>
@@ -52,6 +61,20 @@ const SelectedRights = ({ isConfirmation }: Props) => {
                     >
                       <Divider orientation="horizontal" padding={"5px"} />
                       <ListIcon as={MdCheckCircle} color={"#006969"} />
+                      {role.resource.name} | {role.name}
+                    </ListItem>
+                  ))}
+                  {rolesToRevoke?.map((role, index) => (
+                    <ListItem
+                      key={index}
+                      cursor={"pointer"}
+                      onClick={() => handleRevokedListItemClick(role)}
+                      width="full"
+                      fontSize={20}
+                      marginTop={"5px"}
+                    >
+                      <Divider orientation="horizontal" padding={"5px"} />
+                      <ListIcon as={FiMinus} color={"#8B4950"} />
                       {role.resource.name} | {role.name}
                     </ListItem>
                   ))}

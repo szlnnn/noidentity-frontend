@@ -5,6 +5,7 @@ import { Box, HStack, Spinner } from "@chakra-ui/react";
 import useCounterStore from "../../../stores/stepStore.ts";
 import useRoleStore from "../../../stores/requestRightsStore.ts";
 import { useUserStore } from "../../../stores/requestUserStore.ts";
+import useRevokeRoleStore from "../../../stores/revokeRightsStore.ts";
 
 interface Props {
   navigateTo: string;
@@ -15,11 +16,14 @@ const ConfirmRequest = ({ navigateTo }: Props) => {
   const { reset } = useCounterStore();
   const { clearStorage } = useRoleStore();
   const { removeSelectedUser } = useUserStore();
+  const { clearRevokedRolesStorage } = useRevokeRoleStore();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       reset();
       clearStorage();
       removeSelectedUser();
+      clearRevokedRolesStorage();
       navigate(navigateTo);
     }, 2000);
     return () => clearTimeout(timer);
