@@ -41,6 +41,13 @@ const HomePage = () => {
             </Box>
           </Link>
         </GridItem>
+        <GridItem>
+          <Link to={"/my-roles"}>
+            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
+              My Roles
+            </Box>
+          </Link>
+        </GridItem>
       </Grid>
     </>
   );

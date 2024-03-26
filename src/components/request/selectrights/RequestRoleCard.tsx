@@ -77,24 +77,9 @@ const RequestRoleCard = ({ role }: Props) => {
           </HStack>
         </CardHeader>
         <CardBody>
-          {operation === "A" && (
-            <CardBodyRequest
-              role={role}
-              userRoleAssignment={userRoleAssignment}
-            />
-          )}
-          {operation === "R" && (
-            <CardBodyRevoke
-              role={role}
-              userRoleAssignment={userRoleAssignment}
-            />
-          )}
-          {operation === "N" && (
-            <CardBodyDenied
-              role={role}
-              userRoleAssignment={userRoleAssignment}
-            />
-          )}
+          {operation === "A" && <CardBodyRequest role={role} />}
+          {operation === "R" && <CardBodyRevoke role={role} />}
+          {operation === "N" && <CardBodyDenied role={role} />}
         </CardBody>
       </Card>
     </>
