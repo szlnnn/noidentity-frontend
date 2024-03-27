@@ -1,51 +1,75 @@
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, Heading } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
+import { FaUserGroup } from "react-icons/fa6";
+import { VscFileSubmodule } from "react-icons/vsc";
+import { SiAwsorganizations } from "react-icons/si";
+import { TbFolderPlus } from "react-icons/tb";
+import { FaTasks } from "react-icons/fa";
+import { PiFolderUser } from "react-icons/pi";
+
+import MenuItemContainer from "../components/MenuItemContainer.tsx";
+import authService from "../service/authService.ts";
 
 const HomePage = () => {
+  const userRole = authService.getCurrentUser().role;
+
   return (
     <>
       <Grid gap={4} templateColumns="repeat(3, 1fr)">
-        <Link to={"/register"}>
+        {userRole === "ADMIN" && (
           <GridItem>
-            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              Register User
-            </Box>
+            <Link to={"/register"}>
+              <MenuItemContainer>
+                <Heading>Manage Users</Heading>
+                <FaUserGroup size={80} color="#006969" />
+              </MenuItemContainer>
+            </Link>
           </GridItem>
-        </Link>
-        <GridItem>
-          <Link to={"/resources"}>
-            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              Manage Resources and Roles
-            </Box>
-          </Link>
-        </GridItem>
-        <GridItem>
-          <Link to={"/departments"}>
-            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              Manage Organizations
-            </Box>
-          </Link>
-        </GridItem>
+        )}
+
+        {userRole === "ADMIN" && (
+          <GridItem>
+            <Link to={"/resources"}>
+              <MenuItemContainer>
+                <Heading>Manage Roles</Heading>
+                <VscFileSubmodule size={80} color={"#006969"} />
+              </MenuItemContainer>
+            </Link>
+          </GridItem>
+        )}
+        {userRole === "ADMIN" && (
+          <GridItem>
+            <Link to={"/departments"}>
+              <MenuItemContainer>
+                <Heading>Manage Organizations</Heading>
+                <SiAwsorganizations size={80} color={"#006969"} />
+              </MenuItemContainer>
+            </Link>
+          </GridItem>
+        )}
         <GridItem>
           <Link to={"/request"}>
-            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              Request Rights
-            </Box>
+            <MenuItemContainer>
+              <Heading>Request Rights</Heading>
+              <TbFolderPlus size={80} color={"#006969"} />
+            </MenuItemContainer>
           </Link>
         </GridItem>
         <GridItem>
           <Link to={"/tasks"}>
-            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              My Tasks
-            </Box>
+            <MenuItemContainer>
+              <Heading>Tasks</Heading>
+              <FaTasks size={80} color={"#006969"} />
+            </MenuItemContainer>
           </Link>
         </GridItem>
         <GridItem>
           <Link to={"/my-roles"}>
-            <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center">
-              My Roles
-            </Box>
+            <MenuItemContainer>
+              <Heading>My Roles</Heading>
+              <PiFolderUser size={80} color={"#006969"} />
+            </MenuItemContainer>
           </Link>
         </GridItem>
       </Grid>

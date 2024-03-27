@@ -44,15 +44,7 @@ const PrivateRoutes = () => {
       >
         <Show above={"lg"}>
           <GridItem area={"aside"} paddingX={5}>
-            <UserProfile
-              login={user.login}
-              firstName={user.firstName}
-              lastName={user.lastName}
-              email={user.email}
-              endDate={user.endDate}
-              startDate={user.startDate}
-              role={user.role}
-            />
+            <UserProfile />
           </GridItem>
         </Show>
         <GridItem w="90%" area={"main"} paddingX={5} paddingY={10}>
