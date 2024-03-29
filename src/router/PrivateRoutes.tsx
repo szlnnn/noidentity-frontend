@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import authService from "../service/authService.ts";
-import NavBar from "../components/NavBar.tsx";
+import NavBar from "../components/navbar/NavBar.tsx";
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import UserProfile from "../components/UserProfile.tsx";
 import { jwtDecode } from "jwt-decode";

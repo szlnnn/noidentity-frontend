@@ -1,12 +1,13 @@
 import { Box, Flex, Image, Spacer, Button } from "@chakra-ui/react";
 import { FiLogOut } from "react-icons/fi";
-import logoSmall from "../assets/logosmall.webp";
+import logoSmall from "../../assets/logosmall.webp";
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../service/authService.ts";
-import useCounterStore from "../stores/stepStore.ts";
-import useRoleStore from "../stores/requestRightsStore.ts";
-import { useUserStore } from "../stores/requestUserStore.ts";
-import useRevokeRoleStore from "../stores/revokeRightsStore.ts";
+import AuthService from "../../service/authService.ts";
+import useCounterStore from "../../stores/stepStore.ts";
+import useRoleStore from "../../stores/requestRightsStore.ts";
+import { useUserStore } from "../../stores/requestUserStore.ts";
+import useRevokeRoleStore from "../../stores/revokeRightsStore.ts";
+import UserQuickSearch from "./UserQuickSearch.tsx";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const Navbar = () => {
           <Image src={logoSmall} height={66} width={350} />
         </Link>
         <Spacer />
+        <UserQuickSearch />
 
         <Button
           colorScheme="teal"
