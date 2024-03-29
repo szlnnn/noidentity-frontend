@@ -54,6 +54,7 @@ const UserQuickSearch: React.FC = () => {
   const handleClick = (user: User) => {
     setSelectedUser(user);
     setIsResultOpen(false);
+    setInputValue("");
     onOpen();
   };
 
