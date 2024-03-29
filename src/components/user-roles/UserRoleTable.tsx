@@ -1,27 +1,13 @@
 import { UserRoleAssignment } from "../../entity/UserRoleAssignment.ts";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import Moment from "moment";
+import helperService from "../../service/helperService.ts";
 
 interface Props {
   assignments: UserRoleAssignment[] | undefined;
 }
 
 const UserRoleTable = ({ assignments }: Props) => {
-  const getOperationLable = (assignmentStatus: string) => {
-    if (assignmentStatus === "A") {
-      return "Assigned";
-    }
-    if (assignmentStatus === "PR") {
-      return "Pending request to revoke";
-    }
-    if (assignmentStatus === "PA") {
-      return "Pending request";
-    }
-    if (assignmentStatus === "R") {
-      return "Revoked";
-    }
-  };
-
   return (
     <>
       <Table variant="simple" size="md" borderWidth="1px">
@@ -54,7 +40,9 @@ const UserRoleTable = ({ assignments }: Props) => {
                 {assignemnt.revokedTime &&
                   Moment(assignemnt?.revokedTime).format("yyyy-MM-DD hh:mm:ss")}
               </Td>
-              <Td>{getOperationLable(assignemnt.assignmentStatus)}</Td>
+              <Td>
+                {helperService.getOperationLabel(assignemnt.assignmentStatus)}
+              </Td>
             </Tr>
           ))}
         </Tbody>

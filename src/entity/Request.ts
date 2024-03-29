@@ -1,13 +1,15 @@
 import { User } from "./User.ts";
 import { Role } from "./Role.ts";
+import { UserRoleAssignment } from "./UserRoleAssignment.ts";
 
-export type Task = {
+export type Request = {
   id?: string;
   status: string;
-  type: string;
+  outcome: string;
   creationTime: string;
-  completionTime: string;
   targetUser: User;
+  requester: User;
   role: Role;
+  assignment: UserRoleAssignment;
   operation: string;
 };

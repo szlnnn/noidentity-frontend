@@ -4,7 +4,6 @@ import authService from "../service/authService.ts";
 
 const UserProfile = () => {
   const user = authService.getCurrentUser();
-  console.log(user);
   return (
     <Box
       maxW="md"

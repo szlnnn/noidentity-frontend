@@ -7,6 +7,7 @@ import { SiAwsorganizations } from "react-icons/si";
 import { TbFolderPlus } from "react-icons/tb";
 import { FaTasks } from "react-icons/fa";
 import { PiFolderUser } from "react-icons/pi";
+import { LuHistory } from "react-icons/lu";
 
 import MenuItemContainer from "../components/MenuItemContainer.tsx";
 import authService from "../service/authService.ts";
@@ -69,6 +70,14 @@ const HomePage = () => {
             <MenuItemContainer>
               <Heading>My Roles</Heading>
               <PiFolderUser size={80} color={"#006969"} />
+            </MenuItemContainer>
+          </Link>
+        </GridItem>
+        <GridItem>
+          <Link to={"/my-requests"}>
+            <MenuItemContainer>
+              <Heading>My Requests</Heading>
+              <LuHistory size={80} color={"#006969"} />
             </MenuItemContainer>
           </Link>
         </GridItem>

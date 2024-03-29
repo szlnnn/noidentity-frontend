@@ -18,6 +18,7 @@ import RequestTasksPage from "./pages/RequestTasksPage.tsx";
 import TaskInfo from "./components/request-task/TaskInfo.tsx";
 import NoTaskSelected from "./components/request-task/NoTaskSelected.tsx";
 import UserRolePage from "./pages/UserRolePage.tsx";
+import UserRequestsPage from "./pages/UserRequestsPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: "/my-roles",
         element: <UserRolePage />,
+      },
+      {
+        path: "/my-requests",
+        element: <UserRequestsPage />,
       },
     ],
   },
