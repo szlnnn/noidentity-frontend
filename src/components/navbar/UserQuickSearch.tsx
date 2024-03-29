@@ -18,7 +18,7 @@ import {
 import { BsSearch } from "react-icons/bs";
 import UserSearchResultModal from "./UserSearchResultModal.tsx";
 
-const UserQuickSearch: React.FC = () => {
+const UserQuickSearch = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { data: users } = useUsers();
