@@ -19,6 +19,7 @@ import TaskInfo from "./components/request-task/TaskInfo.tsx";
 import NoTaskSelected from "./components/request-task/NoTaskSelected.tsx";
 import UserRolePage from "./pages/UserRolePage.tsx";
 import UserRequestsPage from "./pages/UserRequestsPage.tsx";
+import ReportPage from "./pages/ReportPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
       {
         path: "/my-requests",
         element: <UserRequestsPage />,
+      },
+      {
+        path: "/report",
+        element: <ReportPage />,
       },
     ],
   },

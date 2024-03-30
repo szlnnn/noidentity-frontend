@@ -8,6 +8,7 @@ import { TbFolderPlus } from "react-icons/tb";
 import { FaTasks } from "react-icons/fa";
 import { PiFolderUser } from "react-icons/pi";
 import { LuHistory } from "react-icons/lu";
+import { TbReportSearch } from "react-icons/tb";
 
 import MenuItemContainer from "../components/MenuItemContainer.tsx";
 import authService from "../service/authService.ts";
@@ -81,6 +82,16 @@ const HomePage = () => {
             </MenuItemContainer>
           </Link>
         </GridItem>
+        {userRole === "ADMIN" && (
+          <GridItem>
+            <Link to={"/report"}>
+              <MenuItemContainer>
+                <Heading>Report</Heading>
+                <TbReportSearch size={80} color={"#006969"} />
+              </MenuItemContainer>
+            </Link>
+          </GridItem>
+        )}
       </Grid>
     </>
   );
