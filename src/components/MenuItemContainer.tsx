@@ -20,6 +20,7 @@ const MenuItemContainer = ({ children }: Props) => {
       borderRadius="10px"
       textAlign="center"
       style={style}
+      position={"relative"}
     >
       <HStack justifyContent={"space-between"}>{children}</HStack>
     </Box>

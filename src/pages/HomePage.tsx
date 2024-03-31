@@ -12,6 +12,7 @@ import { TbReportSearch } from "react-icons/tb";
 
 import MenuItemContainer from "../components/MenuItemContainer.tsx";
 import authService from "../service/authService.ts";
+import TaskCountBadge from "../components/request-task/TaskCountBadge.tsx";
 
 const HomePage = () => {
   const userRole = authService.getCurrentUser().role;
@@ -63,6 +64,7 @@ const HomePage = () => {
             <MenuItemContainer>
               <Heading>Tasks</Heading>
               <FaTasks size={80} color={"#006969"} />
+              <TaskCountBadge />
             </MenuItemContainer>
           </Link>
         </GridItem>

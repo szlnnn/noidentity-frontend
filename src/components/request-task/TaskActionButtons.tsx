@@ -55,11 +55,11 @@ const TaskActionButtons = ({ task }: Props) => {
 
   return (
     <HStack width={"80%"} padding={10} justifyContent={"right"}>
-      <Button backgroundColor={"#006969"} onClick={handleApprove} padding={5}>
-        Approve
-      </Button>
       <Button backgroundColor={"#8B4950"} onClick={handleReject} padding={5}>
         Reject
+      </Button>
+      <Button backgroundColor={"#006969"} onClick={handleApprove} padding={5}>
+        Approve
       </Button>
       <Box padding={2} onClick={() => setError("")}>
         {error && <ErrorAlert>{error}</ErrorAlert>}
