@@ -20,6 +20,7 @@ import NoTaskSelected from "./components/request-task/NoTaskSelected.tsx";
 import UserRolePage from "./pages/UserRolePage.tsx";
 import UserRequestsPage from "./pages/UserRequestsPage.tsx";
 import ReportPage from "./pages/ReportPage.tsx";
+import ManageResourceAttributeValuesPage from "./pages/ManageResourceAttributeValuesPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
       {
         path: "/report",
         element: <ReportPage />,
+      },
+      {
+        path: "/resource/values",
+        element: <ManageResourceAttributeValuesPage />,
       },
     ],
   },

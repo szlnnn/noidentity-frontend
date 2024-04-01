@@ -34,7 +34,7 @@ const TaskInfo = () => {
         </DefinitionItem>
         <DefinitionItem term="Request Time">
           <Text fontSize={"lg"} key={task?.creationTime}>
-            {Moment(task?.creationTime).format("yyyy-MM-DD")}
+            {Moment(task?.creationTime).format("yyyy-MM-DD hh:mm:ss")}
           </Text>
         </DefinitionItem>
         <DefinitionItem term="Operation">

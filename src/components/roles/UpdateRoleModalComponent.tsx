@@ -10,7 +10,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
+  Select as ChakraSelect,
   Box,
   HStack,
   Checkbox,
@@ -21,6 +21,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Role } from "../../entity/Role.ts";
 import RoleService from "../../service/roleService.ts";
 import Moment from "moment/moment";
+import useResourceAttributeValues from "../../hooks/useResourceAttributeValues.ts";
+import Select, { SingleValue } from "react-select";
+import { ResourceAttributeValue } from "../../entity/ResourceAttributeValue.ts";
+import customStylesRAV from "../../styles/react-select-res-attr-value.ts";
 
 interface Props {
   isOpen: boolean;
@@ -36,6 +40,8 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
 
   const [checked, setChecked] = useState(role.active);
 
+  const { data: values, isLoading } = useResourceAttributeValues();
+
   const handleCheckboxChange = () => {
     setChecked(!checked);
   };
@@ -48,6 +54,16 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
     resourceRoleId: role.resourceRoleId,
   });
 
+  const [selectedRAV, setSelectedRAV] = useState<
+    SingleValue<ResourceAttributeValue>
+  >(values?.find((value) => value.identifier === role.resourceRoleId) || null);
+
+  const handleRAVChange = (
+    selectedOption: SingleValue<ResourceAttributeValue>,
+  ) => {
+    setSelectedRAV(selectedOption);
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -59,6 +75,10 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+    let resourceRoleId = formData.resourceRoleId;
+    if (selectedRAV) {
+      resourceRoleId = selectedRAV.identifier;
+    }
     e.preventDefault();
     RoleService.update({
       ...role,
@@ -66,7 +86,7 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
       type: formData.type,
       description: formData.description,
       created: formData.created,
-      resourceRoleId: formData.resourceRoleId,
+      resourceRoleId: resourceRoleId,
       active: checked,
     }).then(
       (response) => {
@@ -106,7 +126,7 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
             </FormControl>
             <FormControl>
               <FormLabel>Type</FormLabel>
-              <Select
+              <ChakraSelect
                 name="type"
                 value={formData.type}
                 mb={6}
@@ -114,7 +134,7 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
               >
                 <option value="Licence">Licence</option>
                 <option value="ApplicationRole">ApplicationRole</option>
-              </Select>
+              </ChakraSelect>
             </FormControl>
 
             <FormControl>
@@ -142,13 +162,37 @@ const UpdateRoleModalComponent = ({ isOpen, title, onClose, role }: Props) => {
                 value={Moment(formData.created).format("yyyy-MM-DD")}
                 onChange={handleChange}
               />
-              <FormLabel>Resource Role Object Id</FormLabel>
-              <Input
-                type="text"
-                name="resourceRoleId"
-                value={formData.resourceRoleId}
-                onChange={handleChange}
-              />
+              {role.resource.type !== "Azure" && (
+                <FormControl>
+                  <FormLabel>Resource Role Object Id</FormLabel>
+                  <Input
+                    type="text"
+                    name="resourceRoleId"
+                    value={formData.resourceRoleId}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+              )}
+              {role.resource.type === "Azure" && (
+                <FormControl>
+                  <FormLabel>Resource Role Object</FormLabel>
+                  <Select
+                    options={values?.filter(
+                      (value: ResourceAttributeValue) =>
+                        value.type === formData.type && value.managed,
+                    )}
+                    styles={customStylesRAV}
+                    value={selectedRAV}
+                    onChange={handleRAVChange}
+                    isLoading={isLoading}
+                    placeholder={role.resourceRoleId}
+                    isClearable={true}
+                    getOptionLabel={(option) =>
+                      `${option.name} : ${option.identifier}`
+                    }
+                  />
+                </FormControl>
+              )}
             </FormControl>
             <HStack marginTop={3}>
               <Button type="submit" colorScheme="blue" mr={3}>
