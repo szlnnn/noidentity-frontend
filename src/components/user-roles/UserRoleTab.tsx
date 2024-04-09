@@ -10,10 +10,13 @@ const UserRoleTab = () => {
   );
 
   const assignedRoles = userRoleAssignments?.filter(
-    (ura) => ura.assignmentStatus === "A" || ura.assignmentStatus === "PR",
+    (ura) =>
+      ura.assignmentStatus === "A" ||
+      ura.assignmentStatus === "PR" ||
+      ura.assignmentStatus === "PTR",
   );
   const pendingRoles = userRoleAssignments?.filter(
-    (ura) => ura.assignmentStatus === "PA",
+    (ura) => ura.assignmentStatus === "PA" || ura.assignmentStatus === "PTA",
   );
   const revokedRoles = userRoleAssignments?.filter(
     (ura) => ura.assignmentStatus === "R",

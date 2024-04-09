@@ -4,10 +4,10 @@ const getOperationLabel = (assignmentStatus: string) => {
   if (assignmentStatus === "A") {
     return "Assigned";
   }
-  if (assignmentStatus === "PR") {
+  if (assignmentStatus === "PR" || assignmentStatus === "PTR") {
     return "Pending request to revoke";
   }
-  if (assignmentStatus === "PA") {
+  if (assignmentStatus === "PA" || assignmentStatus === "PTA") {
     return "Pending request";
   }
   if (assignmentStatus === "R") {
